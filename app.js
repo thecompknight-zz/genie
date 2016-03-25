@@ -1,3 +1,4 @@
+DEVICE_ID = 'WGENIE-R2D2'
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -5,10 +6,17 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var OrderingModule = require('./modules/orderingModule');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var restClient = require('request');
+
 var app = express();
+
+app.set('om1',new OrderingModule(3,5,7,8));
+app.set('om2',new OrderingModule(13,15,16,18));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -55,6 +63,18 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+var piShutdown = function()
+{
+    console.log("Shutting down PI");
+    process.exit();
+}
+
+// listen for TERM signal .e.g. kill
+process.on ('SIGTERM', piShutdown);
+
+// listen for INT signal e.g. Ctrl-C
+process.on ('SIGINT', piShutdown);
 
 
 module.exports = app;
