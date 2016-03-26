@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var gpio = require('rpi-gpio');
 
 var OrderingModule = require('./modules/orderingModule');
 
@@ -67,6 +68,9 @@ app.use(function(err, req, res, next) {
 var piShutdown = function()
 {
     console.log("Shutting down PI");
+    gpio.destroy(function() {
+        console.log('All pins unexported');
+    });
     process.exit();
 }
 
