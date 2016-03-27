@@ -17,39 +17,16 @@ var restClient = require('request');
 
 var app = express();
 
-app.set('om1',new OrderingModule(3,5,7,8));
-app.set('om2',new OrderingModule(13,15,16,18));
-
-
-/*
-var statusLed = new Gpio(4, 'out');
-var testButton = new Gpio(17, 'in', 'both');
-
-statusLed.write(1, function(err) {
-	if(err) {
-		throw err;
-	}
-	console.log("PI module is up for usage");
-});
-testButton.watch(function (err, value) {
-    if (err) {
-        throw err;
-    }
-    console.log("Test Button has value "+value);
-});
-
-*/
-
 var statusLed = PIUtils.setupForOutput(4);
-var testButton = PIUtils.setupForInput(17);
+//var testButton = PIUtils.setupForInput(17);
 
 PIUtils.sendSignal(statusLed,1);
-PIUtils.watch(testButton,function(err,value) {
+/*PIUtils.watch(testButton,function(err,value) {
     if (err) {
         throw err;
     }
     console.log("Test Button has value "+value);
-});
+});*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -97,22 +74,14 @@ app.use(function(err, req, res, next) {
   });
 });
 
-/*
-var piShutdown = function()
-{
-    console.log("Shutting down PI");
-    //Gpio.unwatchAll();
-    statusLed.unexport();
-    testButton.unexport();
-    process.exit();
-}
-
-*/
-
 var piShutdown = function() {
     console.log("Shutting down PI");
     statusLed.tearDown();
-    testButton.tearDown();
+    //testButton.tearDown();
+
+    app.get('om1').tearDown();
+    app.get('om2').tearDown();
+
     process.exit();
 }
 
@@ -123,5 +92,8 @@ process.on ('SIGTERM', piShutdown);
 // listen for INT signal e.g. Ctrl-C
 process.on ('SIGINT', piShutdown);
 
+
+app.set('om1',new OrderingModule(3,5,7,17));
+app.set('om2',new OrderingModule(13,15,16,18));
 
 module.exports = app;
