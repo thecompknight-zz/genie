@@ -41,9 +41,9 @@ testButton.watch(function (err, value) {
 */
 
 var statusLed = PIUtils.setupForOutput(4);
-var statusLed1 = PIUtils.setupForOutput(5);
 var testButton = PIUtils.setupForInput(17);
 
+PIUtils.sendSignal(statusLed,1);
 PIUtils.watch(testButton,function(err,value) {
     if (err) {
         throw err;
@@ -112,7 +112,6 @@ var piShutdown = function()
 var piShutdown = function() {
     console.log("Shutting down PI");
     statusLed.tearDown();
-    statusLed1.tearDown();
     testButton.tearDown();
     process.exit();
 }

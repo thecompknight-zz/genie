@@ -16,7 +16,7 @@ var OutputObject = function(pin) {
 
 OutputObject.prototype = new GPIOObject();
 
-OutputObject.prototype.sendSignal = function() {
+OutputObject.prototype.sendSignal = function(value) {
     console.log("PIN : " + this.pin+" Sending signal : "+value);
 }
 
@@ -29,7 +29,7 @@ InputObject.prototype = new GPIOObject();
 
 var PIUtils = {
     sendSignal : function(outputObj, value) {
-        outputObj.sendSignal();
+        outputObj.sendSignal(value);
     },
 
     watch : function(gpioObject, callback) {
