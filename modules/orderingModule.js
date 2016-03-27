@@ -36,9 +36,10 @@ var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
 
     OrderManager.registerModule(this);
 
+    var that = this;
     this.placeOrder = function(err,value) {
         if(value===1)
-            OrderManager.placeOrder(this);
+            OrderManager.placeOrder(that);
     }
 
     PIUtils.watch(this.buttonIn,  this.placeOrder);
