@@ -5,7 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var gpio = require('rpi-gpio');
+var Gpio = require('onoff').Gpio;
 var sleep = require('sleep');
 var async = require('async');
 var OrderingModule = require('./modules/orderingModule');
@@ -21,20 +21,17 @@ app.set('om1',new OrderingModule(3,5,7,8));
 app.set('om2',new OrderingModule(13,15,16,18));
 
 
-//gpio.setMode(gpio.MODE_RPI);
+var statusLed = new Gpio(7, 'out');
+var testButton = new Gpio(11, 'in', 'both');
 
-gpio.on('change', function(channel, value) {
-    console.log('Channel ' + channel + ' value is now ' + value);
+statusLed.write(1);
+testButton.watch(function (err, value) {
+    if (err) {
+        throw err;
+    }
+    console.log("Test Button has value "+value);
 });
-gpio.setup(11, gpio.DIR_IN, gpio.EDGE_BOTH);
-gpio.setup(7, gpio.DIR_OUT, write);
 
-function write() {
-    gpio.write(7, true, function(err) {
-        if (err) throw err;
-        console.log('Written to pin 7');
-    });
-}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -82,30 +79,21 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
 var piShutdown = function()
 {
     console.log("Shutting down PI");
-    async.series([
-        function(callback){
-            gpio.write(7, false, function(err) {
-                    if (err) throw err;
-                    console.log('Turning off pin 7');
-            });
-            callback();
-        },
-        function(callback){
-            console.log("Destroying gpio");
-            gpio.destroy(function() {
-                console.log('GPIO Closed');
-                process.exit();
-            });
-            callback();
-        }],
-    function(err, results){
-    	console.log('Result of the whole aync run is ' + results);
-    });
-    
+
+    statusLed.unexport();
+    testButton.unexport();
+    process.exit();
 }
+
+/*
+
+var piShutdown = function() {
+    process.exit();
+}    */
 
 // listen for TERM signal .e.g. kill
 process.on ('SIGTERM', piShutdown);
