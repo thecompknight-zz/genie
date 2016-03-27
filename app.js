@@ -6,7 +6,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var gpio = require('rpi-gpio');
-
+var sleep = require('sleep');
+var async = require('async');
 var OrderingModule = require('./modules/orderingModule');
 
 var routes = require('./routes/index');
@@ -18,6 +19,22 @@ var app = express();
 
 app.set('om1',new OrderingModule(3,5,7,8));
 app.set('om2',new OrderingModule(13,15,16,18));
+
+
+//gpio.setMode(gpio.MODE_RPI);
+
+gpio.on('change', function(channel, value) {
+    console.log('Channel ' + channel + ' value is now ' + value);
+});
+gpio.setup(11, gpio.DIR_IN, gpio.EDGE_BOTH);
+gpio.setup(7, gpio.DIR_OUT, write);
+
+function write() {
+    gpio.write(7, true, function(err) {
+        if (err) throw err;
+        console.log('Written to pin 7');
+    });
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -68,10 +85,26 @@ app.use(function(err, req, res, next) {
 var piShutdown = function()
 {
     console.log("Shutting down PI");
-    gpio.destroy(function() {
-        console.log('All pins unexported');
+    async.series([
+        function(callback){
+            gpio.write(7, false, function(err) {
+                    if (err) throw err;
+                    console.log('Turning off pin 7');
+            });
+            callback();
+        },
+        function(callback){
+            console.log("Destroying gpio");
+            gpio.destroy(function() {
+                console.log('GPIO Closed');
+                process.exit();
+            });
+            callback();
+        }],
+    function(err, results){
+    	console.log('Result of the whole aync run is ' + results);
     });
-    process.exit();
+    
 }
 
 // listen for TERM signal .e.g. kill
