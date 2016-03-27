@@ -39,11 +39,62 @@ var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
     var that = this;
     this.placeOrder = function(err,value) {
         if(value===1)
+        {
             OrderManager.placeOrder(that);
+            that.setStatus(that.LOCALLY_QUEUED);
+        }
     }
 
     PIUtils.watch(this.buttonIn,  this.placeOrder);
 }
+
+OrderingModule.prototype.setStatus = function(status) {
+    switch(status) {
+        case this.LOCALLY_QUEUED:
+            this.glowWhite();
+            break;
+        case this.GETTING_READY:
+            this.glowGreen();
+            break;
+        case this.SHIPPED:
+            this.glowOrange();
+            break;
+        case this.RECIEVED:
+            this.glowBlack();
+            break;
+    }
+
+}
+
+OrderingModule.prototype.LOCALLY_QUEUED = 'locally_queued';
+OrderingModule.prototype.GETTING_READY = 'getting_ready';
+OrderingModule.prototype.SHIPPED = 'shipped';
+OrderingModule.prototype.RECIEVED = 'recieved';
+
+OrderingModule.prototype.glowWhite = function() {
+    PIUtils.sendSignal(this.rPin,1);
+    PIUtils.sendSignal(this.gPin,1);
+    PIUtils.sendSignal(this.bPin,1);
+}
+
+OrderingModule.prototype.glowGreen = function() {
+    PIUtils.sendSignal(this.rPin,0);
+    PIUtils.sendSignal(this.gPin,1);
+    PIUtils.sendSignal(this.bPin,0);
+}
+
+OrderingModule.prototype.glowOrange = function() {
+    PIUtils.sendSignal(this.rPin,1);
+    PIUtils.sendSignal(this.gPin,1);
+    PIUtils.sendSignal(this.bPin,0);
+}
+
+OrderingModule.prototype.glowBlack = function() {
+    PIUtils.sendSignal(this.rPin,0);
+    PIUtils.sendSignal(this.gPin,0);
+    PIUtils.sendSignal(this.bPin,0);
+}
+
 
 //7,11 is used for status as of now
 //4,17 is used for status now
