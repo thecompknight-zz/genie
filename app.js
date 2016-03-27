@@ -21,10 +21,15 @@ app.set('om1',new OrderingModule(3,5,7,8));
 app.set('om2',new OrderingModule(13,15,16,18));
 
 
-var statusLed = new Gpio(7, 'out');
-var testButton = new Gpio(11, 'in', 'both');
+var statusLed = new Gpio(4, 'out');
+var testButton = new Gpio(17, 'in', 'both');
 
-statusLed.write(1);
+statusLed.write(1, function(err) {
+	if(err) {
+		throw err;
+	}
+	console.log("PI module is up for usage");
+});
 testButton.watch(function (err, value) {
     if (err) {
         throw err;
@@ -83,7 +88,7 @@ app.use(function(err, req, res, next) {
 var piShutdown = function()
 {
     console.log("Shutting down PI");
-
+    //Gpio.unwatchAll();
     statusLed.unexport();
     testButton.unexport();
     process.exit();
