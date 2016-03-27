@@ -1,25 +1,39 @@
+var GPIOObject = function() {
+
+}
+
+GPIOObject.prototype.tearDown = function() {
+    console.log("PIN : "+this.pin+" Tearing down");
+}
+
+GPIOObject.prototype.watch = function(callback) {
+    console.log("PIN : "+this.pin+" adding watcher");
+}
 
 var OutputObject = function(pin) {
     this.pin=pin;
-    this.tearDown =  function(){
-        console.log("PIN : "+this.pin+" Tearing down");
-    }
 };
+
+OutputObject.prototype = new GPIOObject();
+
+OutputObject.prototype.sendSignal = function() {
+    console.log("PIN : " + this.pin+" Sending signal : "+value);
+}
+
 
 var InputObject = function(pin) {
     this.pin=pin;
-    this.tearDown =  function(){
-        console.log("PIN : "+this.pin+" Tearing down");
-    }
 };
 
+InputObject.prototype = new GPIOObject();
+
 var PIUtils = {
-    sendSignal : function(pin, value) {
-        console.log("PIN : " + pin+" Sending signal : "+value);
+    sendSignal : function(outputObj, value) {
+        outputObj.sendSignal();
     },
 
-    watch : function(pin, callback) {
-        console.log("PIN : "+pin+" Adding watcher");
+    watch : function(gpioObject, callback) {
+        gpioObject.watch(callback);
     },
 
     setupForInput : function(pin) {

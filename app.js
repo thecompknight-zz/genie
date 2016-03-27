@@ -5,7 +5,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-//var Gpio = require('onoff').Gpio;
 var PIUtils = require('./modules/mockpiutils');
 var sleep = require('sleep');
 var async = require('async');
@@ -42,7 +41,15 @@ testButton.watch(function (err, value) {
 */
 
 var statusLed = PIUtils.setupForOutput(4);
+var statusLed1 = PIUtils.setupForOutput(5);
 var testButton = PIUtils.setupForInput(17);
+
+PIUtils.watch(testButton,function(err,value) {
+    if (err) {
+        throw err;
+    }
+    console.log("Test Button has value "+value);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -105,6 +112,7 @@ var piShutdown = function()
 var piShutdown = function() {
     console.log("Shutting down PI");
     statusLed.tearDown();
+    statusLed1.tearDown();
     testButton.tearDown();
     process.exit();
 }
