@@ -1,5 +1,7 @@
 var PIUtils = require('./mockpiutils');
 var OrderManager = require('./orderManager');
+var webClient = require('request');
+var config = require('./config');
 
 var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
 
@@ -47,9 +49,29 @@ var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
     }
 
     PIUtils.watch(this.buttonIn,  this.placeOrder);
+
+    setInterval(OrderingModule.prototype.getStatus.bind(this),config.OM_STATUS_POLL_INTERVAL);
 }
 
 OrderingModule.prototype.deviceId = 1;
+
+OrderingModule.prototype.getStatus = function() {
+    var url = config.WEB_SERVER + "/devices/1/device_buttons/"+this.deviceId;
+
+    var that = this;
+    webClient.get({url:url}, function(err,httpResponse,body){
+        if(!err && httpResponse.statusCode===200)
+        {
+            var body = JSON.parse(body);
+            console.log("Setting status of om : "+that.deviceId+" as "+body["status"]);
+            that.setStatus(body['status']);
+        }
+        else
+        {
+            console.log("Failed to retrieve status of om : "+that.deviceId+" "+err);
+        }
+    }) ;
+}
 
 OrderingModule.prototype.setStatus = function(status) {
     switch(status) {
@@ -62,7 +84,7 @@ OrderingModule.prototype.setStatus = function(status) {
         case this.SHIPPED:
             this.glowOrange();
             break;
-        case this.RECIEVED:
+        default:
             this.glowBlack();
             break;
     }

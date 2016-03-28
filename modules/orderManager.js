@@ -1,13 +1,13 @@
 var webClient = require('request');
+var config = require('./config');
 var OrderManager = function() {
     console.log("OrderManager : Creating Order Manager");
 
     this.omHash = {};
     this.openDeviceNo = 1;
     this.pendingOrders = [];
+    setInterval(OrderManager.prototype.flushOrderToServer.bind(this),config.ORDER_FLUSH_INTERVAL);
 }
-
-OrderManager.prototype.WEB_SERVER = "http://192.168.0.103:3001";
 
 OrderManager.prototype.registerModule = function(om) {
     console.log("OrderManager : registering OM with number " + om.deviceId);
@@ -35,7 +35,7 @@ OrderManager.prototype.flushOrderToServer = function() {
         return;
     }
 
-    var url = this.WEB_SERVER + "/devices/1/orders"
+    var url = config.WEB_SERVER + "/devices/1/orders"
 
 
     var formData = {device_button_ids : []};

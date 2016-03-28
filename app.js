@@ -1,5 +1,4 @@
-DEVICE_ID = 'WGENIE-R2D2'
-var ORDER_FLUSH_INTERVAL = 3000;
+var config = require('./modules/config');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -15,7 +14,6 @@ var OrderManager = require('./modules/orderManager');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var restClient = require('request');
 
 var app = express();
 
@@ -97,7 +95,5 @@ process.on ('SIGINT', piShutdown);
 
 app.set('om1',new OrderingModule(3,5,7,17));
 app.set('om2',new OrderingModule(13,15,16,18));
-
-setInterval(OrderManager.flushOrderToServer.bind(OrderManager),ORDER_FLUSH_INTERVAL);
 
 module.exports = app;
