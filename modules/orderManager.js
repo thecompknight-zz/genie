@@ -3,14 +3,14 @@ var OrderManager = function() {
     console.log("OrderManager : Creating Order Manager");
 
     this.omHash = {};
-    this.omCount = 0;
+    this.openDeviceNo = 1;
     this.pendingOrders = [];
 }
 
 OrderManager.prototype.WEB_SERVER = "http://192.168.0.103:3001";
 
 OrderManager.prototype.registerModule = function(om) {
-    var deviceNo = (this.omCount++);
+    var deviceNo = (this.openDeviceNo++);
     console.log("OrderManager : registering OM with number" + deviceNo);
     this.omHash[om]=deviceNo;
 }
