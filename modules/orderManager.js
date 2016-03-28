@@ -46,11 +46,12 @@ OrderManager.prototype.flushOrderToServer = function() {
 
     }
 
+    var that = this;
     webClient.post({url:url, body: formData, json: true}, function(err,httpResponse,body){
         if(!err && httpResponse.statusCode===200)
         {
-            console.log("OrderManager : Flushed "+this.pendingOrders.length+" orders");
-            this.pendingOrders.length = 0;
+            console.log("OrderManager : Flushed "+that.pendingOrders.length+" orders");
+            that.pendingOrders.length = 0;
         }
         else
         {
