@@ -10,20 +10,19 @@ var OrderManager = function() {
 OrderManager.prototype.WEB_SERVER = "http://192.168.0.103:3001";
 
 OrderManager.prototype.registerModule = function(om) {
-    var deviceNo = (this.openDeviceNo++);
-    console.log("OrderManager : registering OM with number" + deviceNo);
-    this.omHash[om]=deviceNo;
+    console.log("OrderManager : registering OM with number " + om.deviceId);
+    this.omHash[om.deviceId]=om.deviceId;
 }
 
 OrderManager.prototype.placeOrder = function(om) {
-    if(this.pendingOrders.indexOf(this.omHash[om]) !== -1)
+    if(this.pendingOrders.indexOf(this.omHash[om.deviceId]) !== -1)
     {
-        console.log('OrderManager : An order is already pending to be submitted for OM : '+this.omHash[om]);
+        console.log('OrderManager : An order is already pending to be submitted for OM : '+this.omHash[om.deviceId]);
     }
     else
     {
-        this.pendingOrders.push(this.omHash[om]);
-        console.log('OrderManager : Recieved Order from OM : '+this.omHash[om]);
+        this.pendingOrders.push(this.omHash[om.deviceId]);
+        console.log('OrderManager : Recieved Order from OM : '+this.omHash[om.deviceId]);
     }
 
 }

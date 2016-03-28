@@ -26,6 +26,7 @@ var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
     this.usedPins.push(gPin);
     this.usedPins.push(bPin);
     this.usedPins.push(buttonPin);
+    this.deviceId = OrderingModule.prototype.deviceId++;
 
     console.log("Creating Ordering module using PINS : "+rPin,gPin,bPin,buttonPin);
 
@@ -48,6 +49,8 @@ var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
     PIUtils.watch(this.buttonIn,  this.placeOrder);
 }
 
+OrderingModule.prototype.deviceId = 1;
+
 OrderingModule.prototype.setStatus = function(status) {
     switch(status) {
         case this.LOCALLY_QUEUED:
@@ -65,6 +68,7 @@ OrderingModule.prototype.setStatus = function(status) {
     }
 
 }
+
 
 OrderingModule.prototype.LOCALLY_QUEUED = 'locally_queued';
 OrderingModule.prototype.GETTING_READY = 'getting_ready';
