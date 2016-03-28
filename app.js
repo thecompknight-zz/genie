@@ -10,7 +10,7 @@ var PIUtils = require('./modules/mockpiutils');
 var sleep = require('sleep');
 var async = require('async');
 var OrderingModule = require('./modules/orderingModule');
-var OrderManager = require('./modules/OrderManager');
+var OrderManager = require('./modules/orderManager');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
