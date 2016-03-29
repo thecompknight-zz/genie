@@ -17,10 +17,10 @@ var users = require('./routes/users');
 
 var app = express();
 
-//var statusLed = PIUtils.setupForOutput(4);
+var statusLed = PIUtils.setupForOutput(21);
 //var testButton = PIUtils.setupForInput(17);
 
-//PIUtils.sendSignal(statusLed,1);
+PIUtils.sendSignal(statusLed,1);
 /*PIUtils.watch(testButton,function(err,value) {
     if (err) {
         throw err;
@@ -76,7 +76,7 @@ app.use(function(err, req, res, next) {
 
 var piShutdown = function() {
     console.log("Shutting down PI");
-    //statusLed.tearDown();
+    statusLed.tearDown();
     //testButton.tearDown();
 
     app.get('om1').tearDown();
@@ -93,7 +93,7 @@ process.on ('SIGTERM', piShutdown);
 process.on ('SIGINT', piShutdown);
 
 
-app.set('om1',new OrderingModule(4,5,7,17));
+app.set('om1',new OrderingModule(2,3,4,14));
 app.set('om2',new OrderingModule(13,15,16,18));
 
 module.exports = app;

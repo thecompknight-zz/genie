@@ -57,7 +57,7 @@ OrderingModule.prototype.deviceId = 1;
 
 OrderingModule.prototype.getStatus = function() {
     var url = config.WEB_SERVER + "/devices/1/device_buttons/"+this.deviceId;
-
+    console.log("Checking Button status");
     var that = this;
     webClient.get({url:url}, function(err,httpResponse,body){
         if(!err && httpResponse.statusCode===200)
@@ -121,9 +121,8 @@ OrderingModule.prototype.glowBlack = function() {
     PIUtils.sendSignal(this.bOut,0);
 }
 
-
-//7,11 is used for status as of now
-//4,17 is used for status now
+//21 is used for status now
+//40 is used for status as of now
 OrderingModule.prototype.validPins = [
       2,3,4,14,15,17,18,27,22,23,24,10,9, 25,11,8, 7, 5, 6, 12,13,19,16,26,20,21
     //3,5,7,8, 10,11,12,13,15,16,18,19,21,22,23,24,26,29,31,32,33,35,36,37,38,40
