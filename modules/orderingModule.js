@@ -21,8 +21,8 @@ var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
     }
     this.functional=true;
     this.rPin = rPin;
-    this.bPin = bPin;
     this.gPin = gPin;
+    this.bPin = bPin;
     this.buttonPin = buttonPin;
     this.usedPins.push(rPin);
     this.usedPins.push(gPin);
@@ -77,13 +77,13 @@ OrderingModule.prototype.getStatus = function() {
 OrderingModule.prototype.setStatus = function(status) {
     switch(status) {
         case this.LOCALLY_QUEUED:
-            this.glowWhite();
+            this.glowBlue();
             break;
         case this.GETTING_READY:
             this.glowGreen();
             break;
         case this.SHIPPED:
-            this.glowOrange();
+            this.glowWhite();
             break;
         default:
             this.glowBlack();
@@ -98,10 +98,16 @@ OrderingModule.prototype.GETTING_READY = 'getting_ready';
 OrderingModule.prototype.SHIPPED = 'shipped';
 OrderingModule.prototype.RECIEVED = 'recieved';
 
+OrderingModule.prototype.glowBlue = function() {
+    PIUtils.sendSignal(this.rOut,1);
+    PIUtils.sendSignal(this.gOut,1);
+    PIUtils.sendSignal(this.bOut,0);
+}
+
 OrderingModule.prototype.glowWhite = function() {
     PIUtils.sendSignal(this.rOut,0);
-    PIUtils.sendSignal(this.gOut,0);
-    PIUtils.sendSignal(this.bOut,0);
+    PIUtils.sendSignal(this.gOut,1);
+    PIUtils.sendSignal(this.bOut,1);
 }
 
 OrderingModule.prototype.glowGreen = function() {
