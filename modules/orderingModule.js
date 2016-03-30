@@ -36,9 +36,8 @@ var OrderingModule = function(rPin,bPin,gPin,buttonPin) {
     this.gOut = PIUtils.setupForOutput(gPin);
     this.bOut = PIUtils.setupForOutput(bPin);
     this.buttonIn = PIUtils.setupForInput(buttonPin);
-    this.currentStatus = this.DEFAULT;
 
-    this.setStatus();
+    this.setStatus(this.DEFAULT);
     OrderManager.registerModule(this);
 
     var that = this;
@@ -76,11 +75,11 @@ OrderingModule.prototype.getStatus = function() {
 
 OrderingModule.prototype.setStatus = function(status) {
 
-    if(this.currentStatus===this.LOCALLY_QUEUED && status!==this.GETTING_READY)
+    /*if(this.currentStatus===this.LOCALLY_QUEUED && status!==this.GETTING_READY)
     {
         console.log("OM "+this.deviceId+" : Cannot change from "+this.LOCALLY_QUEUED+" to "+status);
         return;
-    }
+    } */
     console.log("OM "+this.deviceId+" : Setting status as "+status);
     switch(status) {
         case this.LOCALLY_QUEUED:
@@ -95,8 +94,7 @@ OrderingModule.prototype.setStatus = function(status) {
             this.currentStatus = this.SHIPPED;
             this.glowWhite();
             break;
-        default:
-            this.currentStatus = this.DEFAULT;
+        case this.DEFAULT:
             this.glowBlack();
             break;
     }
