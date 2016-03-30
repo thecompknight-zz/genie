@@ -94,8 +94,11 @@ OrderingModule.prototype.setStatus = function(status) {
             this.currentStatus = this.SHIPPED;
             this.glowWhite();
             break;
-        case this.DEFAULT:
-            this.glowBlack();
+        default:
+            //accept default action only if the current status is not LOCALLY_QUEUED.
+            //this is to handle the case where before submitting locally queued order, server returns null as current status of this OM
+            if(this.currentStatus!==this.LOCALLY_QUEUED)
+                this.glowBlack();
             break;
     }
 }
