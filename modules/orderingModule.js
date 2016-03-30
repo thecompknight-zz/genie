@@ -37,6 +37,7 @@ var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
     this.bOut = PIUtils.setupForOutput(bPin);
     this.buttonIn = PIUtils.setupForInput(buttonPin);
 
+    this.setStatus();
     OrderManager.registerModule(this);
 
     var that = this;
