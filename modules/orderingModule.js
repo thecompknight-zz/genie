@@ -98,27 +98,27 @@ OrderingModule.prototype.SHIPPED = 'shipped';
 OrderingModule.prototype.RECIEVED = 'recieved';
 
 OrderingModule.prototype.glowWhite = function() {
-    PIUtils.sendSignal(this.rOut,1);
-    PIUtils.sendSignal(this.gOut,1);
-    PIUtils.sendSignal(this.bOut,1);
-}
-
-OrderingModule.prototype.glowGreen = function() {
     PIUtils.sendSignal(this.rOut,0);
-    PIUtils.sendSignal(this.gOut,1);
+    PIUtils.sendSignal(this.gOut,0);
     PIUtils.sendSignal(this.bOut,0);
 }
 
-OrderingModule.prototype.glowOrange = function() {
+OrderingModule.prototype.glowGreen = function() {
     PIUtils.sendSignal(this.rOut,1);
+    PIUtils.sendSignal(this.gOut,0);
+    PIUtils.sendSignal(this.bOut,1);
+}
+
+OrderingModule.prototype.glowOrange = function() {
+    PIUtils.sendSignal(this.rOut,0);
     PIUtils.sendSignal(this.gOut,1);
     PIUtils.sendSignal(this.bOut,0);
 }
 
 OrderingModule.prototype.glowBlack = function() {
-    PIUtils.sendSignal(this.rOut,0);
-    PIUtils.sendSignal(this.gOut,0);
-    PIUtils.sendSignal(this.bOut,0);
+    PIUtils.sendSignal(this.rOut,1);
+    PIUtils.sendSignal(this.gOut,1);
+    PIUtils.sendSignal(this.bOut,1);
 }
 
 //21 is used for status now
