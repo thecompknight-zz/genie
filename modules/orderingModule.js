@@ -59,7 +59,7 @@ OrderingModule.prototype.getStatus = function() {
     var url = config.WEB_SERVER + "/devices/1/device_buttons/"+this.deviceId;
     console.log("Checking OM "+this.deviceId+" status");
     var that = this;
-    webClient.get({url:url}, function(err,httpResponse,body){
+    webClient.get({url:url, timeout: config.WEB_SERVER_TIMEOUT}, function(err,httpResponse,body){
         if(!err && httpResponse.statusCode===200)
         {
             var body = JSON.parse(body);
