@@ -81,7 +81,7 @@ OrderingModule.prototype.setStatus = function(status) {
         console.log("OM "+this.deviceId+" : Cannot change from "+this.LOCALLY_QUEUED+" to "+status);
         return;
     }
-    console.log("OM "+that.deviceId+" : Setting status as "+status);
+    console.log("OM "+this.deviceId+" : Setting status as "+status);
     switch(status) {
         case this.LOCALLY_QUEUED:
             this.currentStatus = this.LOCALLY_QUEUED;
