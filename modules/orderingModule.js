@@ -1,9 +1,9 @@
-var PIUtils = require('./mockpiutils');
+var PIUtils = require('./piutils');
 var OrderManager = require('./orderManager');
 var webClient = require('request');
 var config = require('./config');
 
-var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
+var OrderingModule = function(rPin,bPin,gPin,buttonPin) {
 
     if (this.validPins.indexOf(rPin) === -1 ||
         this.validPins.indexOf(gPin) === -1 ||
@@ -36,6 +36,7 @@ var OrderingModule = function(rPin,gPin,bPin,buttonPin) {
     this.gOut = PIUtils.setupForOutput(gPin);
     this.bOut = PIUtils.setupForOutput(bPin);
     this.buttonIn = PIUtils.setupForInput(buttonPin);
+    this.currentStatus = this.DEFAULT;
 
     this.setStatus();
     OrderManager.registerModule(this);
@@ -64,7 +65,6 @@ OrderingModule.prototype.getStatus = function() {
         if(!err && httpResponse.statusCode===200)
         {
             var body = JSON.parse(body);
-            console.log("Setting status of om : "+that.deviceId+" as "+body["status"]);
             that.setStatus(body['status']);
         }
         else
@@ -75,28 +75,39 @@ OrderingModule.prototype.getStatus = function() {
 }
 
 OrderingModule.prototype.setStatus = function(status) {
+
+    if(this.currentStatus===this.LOCALLY_QUEUED && status!==this.GETTING_READY)
+    {
+        console.log("OM "+this.deviceId+" : Cannot change from "+this.LOCALLY_QUEUED+" to "+status);
+        return;
+    }
+    console.log("OM "+that.deviceId+" : Setting status as "+status);
     switch(status) {
         case this.LOCALLY_QUEUED:
+            this.currentStatus = this.LOCALLY_QUEUED;
             this.glowBlue();
             break;
         case this.GETTING_READY:
+            this.currentStatus = this.GETTING_READY;
             this.glowGreen();
             break;
         case this.SHIPPED:
+            this.currentStatus = this.SHIPPED;
             this.glowWhite();
             break;
         default:
+            this.currentStatus = this.DEFAULT;
             this.glowBlack();
             break;
     }
-
 }
 
 
 OrderingModule.prototype.LOCALLY_QUEUED = 'locally_queued';
-OrderingModule.prototype.GETTING_READY = 'getting_ready';
+OrderingModule.prototype.GETTING_READY = 'pending';
 OrderingModule.prototype.SHIPPED = 'shipped';
 OrderingModule.prototype.RECIEVED = 'recieved';
+OrderingModule.prototype.DEFAULT = 'default';
 
 OrderingModule.prototype.glowBlue = function() {
     PIUtils.sendSignal(this.rOut,1);
@@ -106,8 +117,8 @@ OrderingModule.prototype.glowBlue = function() {
 
 OrderingModule.prototype.glowWhite = function() {
     PIUtils.sendSignal(this.rOut,0);
-    PIUtils.sendSignal(this.gOut,1);
-    PIUtils.sendSignal(this.bOut,1);
+    PIUtils.sendSignal(this.gOut,0);
+    PIUtils.sendSignal(this.bOut,0);
 }
 
 OrderingModule.prototype.glowGreen = function() {
