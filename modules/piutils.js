@@ -22,7 +22,7 @@ var OutputObject = function(pin) {
 OutputObject.prototype = new GPIOObject();
 
 OutputObject.prototype.sendSignal = function(value) {
-    console.log("PIN : " + this.pin+" Sending signal : "+value);
+    //console.log("PIN : " + this.pin+" Sending signal : "+value);
     this.gpioObj.writeSync(value);
 }
 
