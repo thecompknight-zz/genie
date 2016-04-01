@@ -35,7 +35,7 @@ OrderManager.prototype.flushOrderToServer = function() {
         return;
     }
 
-    var url = config.WEB_SERVER + "/devices/1/orders"
+    var url = config.WEB_SERVER + "/devices/1/orders.json"
 
 
     var formData = {device_button_ids : []};

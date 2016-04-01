@@ -57,7 +57,7 @@ var OrderingModule = function(rPin,bPin,gPin,buttonPin) {
 OrderingModule.prototype.deviceId = 1;
 
 OrderingModule.prototype.getStatus = function() {
-    var url = config.WEB_SERVER + "/devices/1/device_buttons/"+this.deviceId;
+    var url = config.WEB_SERVER + "/devices/1/device_buttons/"+this.deviceId+".json";
     console.log("Checking OM "+this.deviceId+" status");
     var that = this;
     webClient.get({url:url, timeout: config.WEB_SERVER_TIMEOUT}, function(err,httpResponse,body){
