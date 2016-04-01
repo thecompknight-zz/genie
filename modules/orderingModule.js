@@ -105,7 +105,7 @@ OrderingModule.prototype.setStatus = function(status) {
 
 
 OrderingModule.prototype.LOCALLY_QUEUED = 'locally_queued';
-OrderingModule.prototype.GETTING_READY = 'pending';
+OrderingModule.prototype.GETTING_READY = 'getting_ready';
 OrderingModule.prototype.SHIPPED = 'shipped';
 OrderingModule.prototype.RECIEVED = 'recieved';
 OrderingModule.prototype.DEFAULT = 'default';
