@@ -47,14 +47,14 @@ OrderManager.prototype.flushOrderToServer = function() {
 
     var that = this;
     webClient.post({url:url, body: formData, json: true, timeout: config.WEB_SERVER_TIMEOUT}, function(err,httpResponse,body){
-        if(!err && httpResponse.statusCode===200)
+        if(!err && (httpResponse.statusCode===200 || httpResponse.statusCode==422))
         {
             console.log("OrderManager : Flushed "+that.pendingOrders.length+" orders");
             that.pendingOrders.length = 0;
         }
         else
         {
-            console.log("OrderManager : Failed to flush orders "+err);
+            console.log("OrderManager : Failed to flush orders "+httpResponse.statusCode,err);
         }
     }) ;
 }
