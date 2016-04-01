@@ -28,7 +28,7 @@ var OrderingModule = function(rPin,bPin,gPin,buttonPin) {
     this.usedPins.push(gPin);
     this.usedPins.push(bPin);
     this.usedPins.push(buttonPin);
-    this.deviceId = OrderingModule.prototype.deviceId++;
+    this.deviceId = (OrderingModule.prototype.deviceId++)+"a";
 
     console.log("Creating Ordering module using PINS : "+rPin,gPin,bPin,buttonPin);
 
@@ -57,7 +57,7 @@ var OrderingModule = function(rPin,bPin,gPin,buttonPin) {
 OrderingModule.prototype.deviceId = 1;
 
 OrderingModule.prototype.getStatus = function() {
-    var url = config.WEB_SERVER + "/devices/1/device_buttons/"+this.deviceId+".json";
+    var url = config.WEB_SERVER + "/devices/"+config.DEVICE_ID+"/device_buttons/"+this.deviceId+".json";
     console.log("Checking OM "+this.deviceId+" status");
     var that = this;
     webClient.get({url:url, timeout: config.WEB_SERVER_TIMEOUT}, function(err,httpResponse,body){
@@ -107,7 +107,7 @@ OrderingModule.prototype.setStatus = function(status) {
 OrderingModule.prototype.LOCALLY_QUEUED = 'locally_queued';
 OrderingModule.prototype.GETTING_READY = 'getting_ready';
 OrderingModule.prototype.SHIPPED = 'shipped';
-OrderingModule.prototype.RECIEVED = 'recieved';
+OrderingModule.prototype.RECEIVED = 'received';
 OrderingModule.prototype.DEFAULT = 'default';
 
 OrderingModule.prototype.glowBlue = function() {

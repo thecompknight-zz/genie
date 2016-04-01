@@ -22,7 +22,7 @@ OrderManager.prototype.placeOrder = function(om) {
     else
     {
         this.pendingOrders.push(this.omHash[om.deviceId]);
-        console.log('OrderManager : Recieved Order from OM : '+this.omHash[om.deviceId]);
+        console.log('OrderManager : Received Order from OM : '+this.omHash[om.deviceId]);
     }
 
 }
@@ -35,7 +35,7 @@ OrderManager.prototype.flushOrderToServer = function() {
         return;
     }
 
-    var url = config.WEB_SERVER + "/devices/1/orders.json"
+    var url = config.WEB_SERVER + "/devices/"+config.DEVICE_ID+"/orders.json"
 
 
     var formData = {device_button_ids : []};
