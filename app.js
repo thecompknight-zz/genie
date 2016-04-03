@@ -93,7 +93,7 @@ process.on ('SIGTERM', piShutdown);
 process.on ('SIGINT', piShutdown);
 
 
-app.set('om1',new OrderingModule(2,3,4,14));
-app.set('om2',new OrderingModule(15,17,18,27));
+app.set('om1',new OrderingModule("OM1FZ-FAGG9",2,3,4,14));
+app.set('om2',new OrderingModule("OM2VA-EKGT9",15,17,18,27));
 
 module.exports = app;

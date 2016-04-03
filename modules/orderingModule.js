@@ -3,7 +3,7 @@ var OrderManager = require('./orderManager');
 var webClient = require('request');
 var config = require('./config');
 
-var OrderingModule = function(rPin,bPin,gPin,buttonPin) {
+var OrderingModule = function(deviceId,rPin,bPin,gPin,buttonPin) {
 
     if (this.validPins.indexOf(rPin) === -1 ||
         this.validPins.indexOf(gPin) === -1 ||
@@ -28,7 +28,7 @@ var OrderingModule = function(rPin,bPin,gPin,buttonPin) {
     this.usedPins.push(gPin);
     this.usedPins.push(bPin);
     this.usedPins.push(buttonPin);
-    this.deviceId = (OrderingModule.prototype.deviceId++)+"a";
+    this.deviceId = deviceId;
 
     console.log("Creating Ordering module using PINS : "+rPin,gPin,bPin,buttonPin);
 
@@ -53,8 +53,6 @@ var OrderingModule = function(rPin,bPin,gPin,buttonPin) {
 
     setInterval(OrderingModule.prototype.getStatus.bind(this),config.OM_STATUS_POLL_INTERVAL);
 }
-
-OrderingModule.prototype.deviceId = 1;
 
 OrderingModule.prototype.getStatus = function() {
     var url = config.WEB_SERVER + "/devices/"+config.DEVICE_ID+"/device_buttons/"+this.deviceId+".json";
