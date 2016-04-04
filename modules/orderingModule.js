@@ -90,9 +90,14 @@ OrderingModule.prototype.setStatus = function(status) {
             this.glowGreen();
             break;
         case this.SHIPPED:
+            if(this.currentStatus!==this.SHIPPED)
+            {
+                cmd.run('echo "Please note, some of your orders are shipped out for delivery" | festival --tts');
+            }
             this.currentStatus = this.SHIPPED;
             this.glowWhite();
-            cmd.run('echo "Please note, some of your orders are shipped out for delivery" | festival --tts');
+
+
             break;
         default:
             //accept default action only if the current status is not LOCALLY_QUEUED.
