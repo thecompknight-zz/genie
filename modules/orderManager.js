@@ -46,6 +46,7 @@ OrderManager.prototype.flushOrderToServer = function() {
 
     var that = this;
     webClient.post({url:url, body: formData, json: true, timeout: config.WEB_SERVER_TIMEOUT}, function(err,httpResponse,body){
+
         if(!err && (httpResponse.statusCode===200 || httpResponse.statusCode==422))
         {
             console.log("OrderManager : Flushed "+that.pendingOrders.length+" orders");
@@ -53,7 +54,7 @@ OrderManager.prototype.flushOrderToServer = function() {
         }
         else
         {
-            console.log("OrderManager : Failed to flush orders "+httpResponse.statusCode,err);
+            console.log("OrderManager : Failed to flush orders ",err);
             setTimeout(OrderManager.prototype.flushOrderToServer.bind(that),config.ORDER_FLUSH_INTERVAL);
         }
     }) ;
