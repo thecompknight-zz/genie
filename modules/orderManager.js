@@ -1,5 +1,7 @@
 var webClient = require('request');
 var config = require('./config');
+var cmd=require('node-cmd');
+
 var OrderManager = function() {
     console.log("OrderManager : Creating Order Manager");
 
@@ -51,6 +53,7 @@ OrderManager.prototype.flushOrderToServer = function() {
         {
             console.log("OrderManager : Flushed "+that.pendingOrders.length+" orders");
             that.pendingOrders.length = 0;
+	    cmd.run('echo "Please note, Your orders have been submitted to Walmart" | festival --tts');
         }
         else
         {
