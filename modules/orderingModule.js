@@ -2,6 +2,7 @@ var PIUtils = require('./piutils');
 var OrderManager = require('./orderManager');
 var webClient = require('request');
 var config = require('./config');
+var cmd=require('node-cmd');
 
 var OrderingModule = function(deviceId,rPin,bPin,gPin,buttonPin) {
 
@@ -91,6 +92,7 @@ OrderingModule.prototype.setStatus = function(status) {
         case this.SHIPPED:
             this.currentStatus = this.SHIPPED;
             this.glowWhite();
+            cmd.run('echo "Please note, some of your orders are shipped out for delivery" | festival --tts');
             break;
         default:
             //accept default action only if the current status is not LOCALLY_QUEUED.
