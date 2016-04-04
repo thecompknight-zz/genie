@@ -4,9 +4,7 @@ var OrderManager = function() {
     console.log("OrderManager : Creating Order Manager");
 
     this.omHash = {};
-    this.openDeviceNo = 1;
     this.pendingOrders = [];
-    setInterval(OrderManager.prototype.flushOrderToServer.bind(this),config.ORDER_FLUSH_INTERVAL);
 }
 
 OrderManager.prototype.registerModule = function(om) {
@@ -22,7 +20,8 @@ OrderManager.prototype.placeOrder = function(om) {
     else
     {
         this.pendingOrders.push(this.omHash[om.deviceId]);
-        console.log('OrderManager : Received Order from OM : '+this.omHash[om.deviceId]);
+        setTimeout(OrderManager.prototype.flushOrderToServer.bind(this),config.ORDER_FLUSH_INTERVAL);
+        console.log('OrderManager : Queued Order from OM : '+this.omHash[om.deviceId]);
     }
 
 }
@@ -55,6 +54,7 @@ OrderManager.prototype.flushOrderToServer = function() {
         else
         {
             console.log("OrderManager : Failed to flush orders "+httpResponse.statusCode,err);
+            setTimeout(OrderManager.prototype.flushOrderToServer.bind(that),config.ORDER_FLUSH_INTERVAL);
         }
     }) ;
 }
