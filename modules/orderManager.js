@@ -54,7 +54,7 @@ OrderManager.prototype.flushOrderToServer = function() {
         }
         else
         {
-            console.log("OrderManager : Failed to flush orders ",err);
+            console.log("OrderManager : Failed to flush orders "+err);
             setTimeout(OrderManager.prototype.flushOrderToServer.bind(that),config.ORDER_FLUSH_INTERVAL);
         }
     }) ;
